@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Bangun Ruang Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="bangun ruang/bangunruang.css">
+    <style>
+        .input-field { color: #000000; font-weight: 500; }
+        .result-field { color: #2563eb; font-weight: 700; }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        .shape-btn { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .shape-btn:hover { transform: translateY(-5px); }
+        .active-tab { border-bottom: 4px solid #2563eb; color: #2563eb; }
+    </style>
+</head>
+<body>
+    <header class="text-center py-5">
+        <h1 class="text-3xl font-extrabold text-white tracking-tight">
+            KALKULATOR<br>BANGUN RUANG
+        </h1>
+        <p class="text-white mt-2 font-medium">Solusi Geometri Cerdas dalam Satu Genggaman</p>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 pb-20">
+        
+        <div id="home-menu" class="grid grid-cols-3 gap-3 mb-3">
+            <a href="bangun ruang/kubus.html" class="shape-btn glass-card p-1 rounded-3xl shadow-lg flex flex-col items-center border border-white">
+                <div class="w-25 h-25 bg-cyan-100 rounded-2xl flex items-center justify-center mb-2 text-cyan-600 text-3xl">
+                    <img src="bangun ruang/ikon/kubus.png" width="100px">
+                </div>
+                <span class="font-bold text-slate-700">Kubus</span>
+            </a>
+            <a href="bangun ruang/balok.html" class="shape-btn glass-card p-1 rounded-3xl shadow-lg flex flex-col items-center border border-white">
+                <div class="w-25 h-25 bg-blue-100 rounded-2xl flex items-center justify-center mb-2 text-blue-600 text-3xl">
+                    <img src="bangun ruang/ikon/balok.png" width="100px">
+                </div>
+                <span class="font-bold text-slate-700">Balok</span>
+            </a>
+            <a href="bangun ruang/tabung.html" class="shape-btn glass-card p-1 rounded-3xl shadow-lg flex flex-col items-center border border-white">
+                <div class="w-25 h-25 bg-orange-100 rounded-2xl flex items-center justify-center mb-2 text-orange-600 text-3xl">
+                    <img src="bangun ruang/ikon/tabung.png" width="100px">
+                </div>
+                <span class="font-bold text-slate-700">Tabung</span>
+            </a>
+            <a href="bangun ruang/kerucut.html" class="shape-btn glass-card p-1 rounded-3xl shadow-lg flex flex-col items-center border border-white">
+                <div class="w-25 h-25 bg-yellow-100 rounded-2xl flex items-center justify-center mb-2 text-yellow-600 text-3xl">
+                    <img src="bangun ruang/ikon/kerucut.png" width="100px">
+                </div>
+                <span class="font-bold text-slate-700">Kerucut</span>
+            </a>
+            <a href="bangun ruang/bola.html" class="shape-btn glass-card p-1 rounded-3xl shadow-lg flex flex-col items-center border border-white">
+                <div class="w-25 h-25 bg-red-100 rounded-2xl flex items-center justify-center mb-2 text-red-600 text-3xl">
+                    <img src="bangun ruang/ikon/bola.png" width="100px">
+                </div>
+                <span class="font-bold text-slate-700">Bola</span>
+            </a>
+            <a href="bangun ruang/limas4.html" class="shape-btn glass-card p-1 rounded-3xl shadow-lg flex flex-col items-center border border-white">
+                <div class="w-25 h-25 bg-indigo-100 rounded-2xl flex items-center justify-center mb-2 text-indigo-600 text-3xl">
+                    <img src="bangun ruang/ikon/limas4.png" width="100px">
+                </div>
+                <span class="font-bold text-slate-700">Limas 4</span>
+            </a>
+            <a href="bangun ruang/limas3.html" class="shape-btn glass-card p-1 rounded-3xl shadow-lg flex flex-col items-center border border-white">
+                <div class="w-25 h-25 bg-indigo-100 rounded-2xl flex items-center justify-center mb-2 text-indigo-600 text-3xl">
+                    <img src="bangun ruang/ikon/limas3.png" width="100px">
+                </div>
+                <span class="font-bold text-slate-700">Limas 3</span>
+            </a>
+            <a href="bangun ruang/prisma3.html" class="shape-btn glass-card p-1 rounded-3xl shadow-lg flex flex-col items-center border border-white">
+                <div class="w-25 h-25 bg-teal-100 rounded-2xl flex items-center justify-center mb-2 text-teal-600 text-3xl">
+                    <img src="bangun ruang/ikon/prisma3.png" width="100px">
+                </div>
+                <span class="font-bold text-slate-700">Prisma</span>
+            </a>
+        </div>
+    </main>
+</body>
+</html>
