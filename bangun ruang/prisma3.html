@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Prisma Segitiga Pro</title>
+    <link rel="stylesheet" href="bangunruang.css">
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h2>Prisma Segitiga</h2>
+            <p class="description">Alas Segitiga Sama Sisi</p>
+            <img src="rumus/prisma3.png" alt="Prisma" height="120px">
+        </div>
+
+        <div class="element">
+            <div>
+                <label>Sisi Alas (s)</label>
+                <input type="number" id="s" class="input-field" placeholder="s">
+            </div>
+            <div>
+                <label>Tinggi (t)</label>
+                <input type="number" id="t" class="input-field" placeholder="t">
+            </div>
+            
+            <div>
+                <label>Volume (V)</label>
+                <input type="number" id="v" class="input-field" placeholder="V">
+            </div>
+            
+            <div>
+                <label>Luas (L)</label>
+                <input type="number" id="lp" class="input-field " placeholder="L">
+            </div>
+        </div>
+        <div class="btn-group">
+            <button onclick="hitungPrisma()" class="btn-menu">Hitung</button>
+            <button onclick="resetForm()" class="btn-menu">Reset</button>
+            <a href="../index.html" class="btn-menu">Home</a>
+        </div>
+        <p id="error-msg" class="message"></p>
+    </div>
+
+
+    <script>
+        function hitungPrisma() {
+            const fields = ['s', 't', 'v', 'lp'];
+            let vals = {};
+            let isManual = {};
+
+            fields.forEach(id => {
+                const el = document.getElementById(id);
+                const val = parseFloat(el.value);
+                vals[id] = val;
+                isManual[id] = !isNaN(val);
+                el.classList.remove('result-field');
+                el.classList.add('input-field');
+            });
+
+            if (Object.values(isManual).filter(v => v).length < 2) {
+                document.getElementById('error-msg').innerText = "⚠️ Masukkan minimal 2 elemen!";
+                document.getElementById('error-msg').classList.remove('hidden');
+                return;
+            }
+            document.getElementById('error-msg').classList.add('hidden');
+
+            let {s, t, v, lp} = vals;
+
+            // Iterasi Logika
+            for (let i = 0; i < 2; i++) {
+                // Luas Alas (LA) Segitiga Sama Sisi = (s^2 / 4) * sqrt(3)
+                // Keliling Alas = 3 * s
+                const getLA = (side) => (Math.pow(side, 2) / 4) * Math.sqrt(3);
+                
+                // Cari Volume: V = LA * t
+                if (!isNaN(s) && !isNaN(t) && isNaN(v)) v = getLA(s) * t;
+                if (!isNaN(v) && !isNaN(s) && isNaN(t)) t = v / getLA(s);
+                if (!isNaN(v) && !isNaN(t) && isNaN(s)) {
+                    // v = (s^2 / 4 * sqrt(3)) * t -> s^2 = (4 * v) / (sqrt(3) * t)
+                    s = Math.sqrt((4 * v) / (Math.sqrt(3) * t));
+                }
+
+                // Cari Luas Permukaan: LP = (2 * LA) + (3 * s * t)
+                if (!isNaN(s) && !isNaN(t) && isNaN(lp)) lp = (2 * getLA(s)) + (3 * s * t);
+            }
+
+            // Update UI
+            fields.forEach(id => {
+                const el = document.getElementById(id);
+                const finalVal = {s, t, v, lp}[id];
+                if (!isNaN(finalVal)) {
+                    el.value = parseFloat(finalVal.toFixed(2));
+                    if (!isManual[id]) {
+                        el.classList.remove('input-field');
+                        el.classList.add('result-field');
+                    }
+                }
+            });
+        }
+
+        function resetForm() {
+            ['s', 't', 'v', 'lp'].forEach(id => {
+                const el = document.getElementById(id);
+                el.value = '';
+                el.classList.remove('result-field');
+                el.classList.add('input-field');
+            });
+            document.getElementById('error-msg').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

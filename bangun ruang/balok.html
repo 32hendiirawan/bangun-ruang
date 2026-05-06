@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Balok</title>
+    <link rel="stylesheet" href="bangunruang.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Kalkulator Balok</h2>
+            <p class="description">Isi 3 elemen, biarkan sisanya kosong.</p>
+            <img src="rumus/balok.png" alt="Balok" height="120px">
+        </div>
+
+        <div class="element">
+            <div class="relative">
+                <label>Panjang (p)</label>
+                <input type="number" id="p" class="input-field" placeholder="0">
+            </div>
+            <div class="relative">
+                <label>Lebar (l)</label>
+                <input type="number" id="l" class="input-field" placeholder="0">
+            </div>
+            <div class="relative">
+                <label>Tinggi (t)</label>
+                <input type="number" id="t" class="input-field" placeholder="0">
+            </div>
+            <div class="relative">
+                <label>Volume (V)</label>
+                <input type="number" id="v" class="input-field" placeholder="V">
+            </div>
+            <div class="relative">
+                <label>Luas (L)</label>
+                <input type="number" id="lp" class="input-field" placeholder="L">
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button onclick="hitungBalok()" class="btn-menu">Hitung</button>
+            <button onclick="resetForm()" class="btn-menu">Reset</button>
+            <a href="../index.html" class="btn-menu">Home</a> 
+        </div>
+
+        <p id="error-msg" class="message"></p>
+    </div>
+
+    <script>
+        function hitungBalok() {
+            const fields = ['p', 'l', 't', 'v', 'lp'];
+            let vals = {};
+            let isManual = {};
+
+            // 1. Ambil data dan tandai mana yang diisi user
+            fields.forEach(id => {
+                const el = document.getElementById(id);
+                const val = parseFloat(el.value);
+                vals[id] = val;
+                isManual[id] = !isNaN(val);
+                // Reset warna ke default dulu
+                el.classList.remove('result-field');
+                el.classList.add('input-field');
+            });
+
+            // Hitung jumlah input
+            let inputCount = Object.values(isManual);
+            const errorMsg = document.getElementById('error-msg');
+            
+            if (inputCount < 3) {
+                errorMsg.innerText = "⚠️ Minimal isi 3 kolom untuk menghitung!";
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+            errorMsg.classList.add('hidden');
+
+            // 2. Logika Perhitungan (Matematika Balok)
+            let {p, l, t, v, lp} = vals;
+
+            for (let i = 0; i < 2; i++) {
+                // Cari Volume
+                if (isNaN(v) && !isNaN(p) && !isNaN(l) && !isNaN(t)) v = p * l * t;
+                // Cari p, l, t dari Volume
+                if (isNaN(p) && !isNaN(v) && !isNaN(l) && !isNaN(t)) p = v / (l * t);
+                if (isNaN(l) && !isNaN(v) && !isNaN(p) && !isNaN(t)) l = v / (p * t);
+                if (isNaN(t) && !isNaN(v) && !isNaN(p) && !isNaN(l)) t = v / (p * l);
+                // Cari Luas Permukaan
+                if (isNaN(lp) && !isNaN(p) && !isNaN(l) && !isNaN(t)) lp = 2 * (p*l + p*t + l*t);
+                // Cari p, l, t dari Luas Permukaan
+                if (isNaN(p) && !isNaN(lp) && !isNaN(l) && !isNaN(t)) p = (lp/2 - l*t) / (l+t);
+                if (isNaN(l) && !isNaN(lp) && !isNaN(p) && !isNaN(t)) l = (lp/2 - p*t) / (p+t);
+                if (isNaN(t) && !isNaN(lp) && !isNaN(p) && !isNaN(l)) t = (lp/2 - p*l) / (p+l);
+                // Cari p, l, t dari Volume dan Luas
+                if (!isNaN(v) && !isNaN(lp) && !isNaN(p)) {
+                    const btn1 = ((lp/2)-(v/p))/p;
+                    const btn2 = Math.sqrt(btn1*btn1 - (4*v/p));
+                    l = (btn1 + btn2)/2;
+                    t = (btn1 -btn2)/2;
+                }
+                if (!isNaN(v) && !isNaN(lp) && !isNaN(l)) {
+                    const btn1 = ((lp/2)-(v/l))/l;
+                    const btn2 = Math.sqrt(btn1*btn1 - (4*v/l));
+                    p = (btn1 + btn2)/2;
+                    t = (btn1 -btn2)/2;
+                }
+                if (!isNaN(v) && !isNaN(lp) && !isNaN(t)) {
+                    const btn1 = ((lp/2)-(v/t))/t;
+                    const btn2 = Math.sqrt(btn1*btn1 - (4*v/t));
+                    p = (btn1 + btn2)/2;
+                    l = (btn1 -btn2)/2;
+                }
+                     
+            }
+
+            // 3. Update UI dan Beri Warna Biru untuk hasil kalkulasi
+            const finalVals = {p, l, t, v, lp};
+            fields.forEach(id => {
+                const el = document.getElementById(id);
+                if (!isNaN(finalVals[id])) {
+                    el.value = parseFloat(finalVals[id].toFixed(2));
+                    // Jika sebelumnya kosong (tidak manual), ubah warna jadi biru
+                    if (!isManual[id]) {
+                        el.classList.remove('input-field');
+                        el.classList.add('result-field');
+                    }
+                }
+            });
+        }
+
+        function resetForm() {
+            ['p', 'l', 't', 'v', 'lp'].forEach(id => {
+                const el = document.getElementById(id);
+                el.value = '';
+                el.classList.remove('result-field');
+                el.classList.add('input-field');
+            });
+            document.getElementById('error-msg').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

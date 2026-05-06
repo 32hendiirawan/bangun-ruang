@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Limas Segitiga Sama Sisi</title>
+    <link rel="stylesheet" href="bangunruang.css">
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h2>Limas Segitiga</h2>
+            <p class="description">Asumsi: Alas Segitiga Sama Sisi</p>
+            <img src="rumus/limas3.png" alt="Limas3" height="120px">
+        </div>
+
+        <div class="element">
+            <div>
+                <label>Sisi Alas (s)</label>
+                <input type="number" id="s" class="input-field" placeholder="s">
+            </div>
+            <div>
+                <label>Tinggi Limas (t)</label>
+                <input type="number" id="t" class="input-field" placeholder="t">
+            </div>
+            <div>
+                <label>Tinggi Selimut (h)</label>
+                <input type="number" id="h" class="input-field" placeholder="h">
+            </div>
+            <div>
+                <label>Volume (V)</label>
+                <input type="number" id="v" class="input-field" placeholder="V">
+            </div>
+            <div>
+                <label>Luas Permukaan (L)</label>
+                <input type="number" id="l" class="input-field" placeholder="L">
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button onclick="hitungLimasSegitiga()" class="btn-menu">Hitung</button>
+            <button onclick="resetForm()" class="btn-menu">Reset</button>
+            <a href="../index.html" class="btn-menu">Home</a>
+        </div>
+
+        <p id="error-msg" class="message"></p>
+    </div>
+
+    <script>
+        function hitungLimasSegitiga() {
+            const fields = ['s', 't', 'h', 'v', 'l'];
+            let vals = {};
+            let isManual = {};
+
+            fields.forEach(id => {
+                const el = document.getElementById(id);
+                const val = parseFloat(el.value);
+                vals[id] = val;
+                isManual[id] = !isNaN(val);
+                el.classList.remove('result-field');
+                el.classList.add('input-field');
+            });
+
+            if (Object.values(isManual).filter(v => v).length < 2) {
+                document.getElementById('error-msg').innerText = "⚠️ Masukkan minimal 2 elemen (misal: s dan t)!";
+                document.getElementById('error-msg').classList.remove('hidden');
+                return;
+            }
+            document.getElementById('error-msg').classList.add('hidden');
+
+            let {s, t, h, v, l} = vals;
+
+            // Iterasi Logika
+            for (let i = 0; i < 3; i++) {
+                // 1. Luas Alas (LA) segitiga sama sisi = (s^2 / 4) * sqrt(3)
+                // 2. Apotema alas (jarak pusat ke tengah sisi) = s / (2 * sqrt(3))
+                const apotemaAlas = s / (2 * Math.sqrt(3));
+                const luasAlas = (Math.pow(s, 2) / 4) * Math.sqrt(3);
+
+                // Pythagoras hubungan t, h, dan apotema alas: h^2 = t^2 + apotema^2
+                if (!isNaN(t) && !isNaN(s) && isNaN(h)) h = Math.sqrt(Math.pow(t, 2) + Math.pow(apotemaAlas, 2));
+                if (!isNaN(h) && !isNaN(s) && isNaN(t)) t = Math.sqrt(Math.pow(h, 2) - Math.pow(apotemaAlas, 2));
+                
+                // Volume: V = 1/3 * Luas Alas * t
+                if (!isNaN(s) && !isNaN(t) && isNaN(v)) v = (1/3) * luasAlas * t;
+                if (!isNaN(v) && !isNaN(s) && isNaN(t)) t = (3 * v) / luasAlas;
+
+                // Luas Permukaan: LP = Luas Alas + (3 * 1/2 * s * h)
+                if (!isNaN(s) && !isNaN(h) && isNaN(l)) l = luasAlas + (1.5 * s * h);
+            }
+
+            // Update UI
+            fields.forEach(id => {
+                const el = document.getElementById(id);
+                const finalVal = {s, t, h, v, l}[id];
+                if (!isNaN(finalVal)) {
+                    el.value = parseFloat(finalVal.toFixed(2));
+                    if (!isManual[id]) {
+                        el.classList.remove('input-field');
+                        el.classList.add('result-field');
+                    }
+                }
+            });
+        }
+
+        function resetForm() {
+            ['s', 't', 'h', 'v', 'l'].forEach(id => {
+                const el = document.getElementById(id);
+                el.value = '';
+                el.classList.remove('result-field');
+                el.classList.add('input-field');
+            });
+            document.getElementById('error-msg').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

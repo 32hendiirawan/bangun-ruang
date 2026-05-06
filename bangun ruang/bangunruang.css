@@ -1,0 +1,113 @@
+* {
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background: linear-gradient(135deg, blue, skyblue, blue);
+    min-height: 100vh;
+    margin: 0;
+    width: 100%;
+}
+.container {
+    margin-top: 20px;
+    background: white;
+    border-radius: 20px;
+    width: 90%;
+    height: auto;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    align-items: center;
+    justify-content: center;
+}
+
+.element {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 15px;
+}
+
+h1, h2 {
+    color: navy;
+    font-weight: bold;
+    font-size: 2rem;
+    text-align: center;
+    margin: 0px;
+    margin-top: 20px;
+}
+a {
+    text-decoration: none;
+}
+.description {
+    color: rgb(64,64,64);
+    text-align: center;
+    font-size: 1rem;
+    margin:10px;
+}
+
+label{
+    font-size: 1rem;
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: rgb(32,32,32);
+}
+input{
+    font-size: 1.2rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border-radius: 5px;
+    border: 1px solid gray;
+    padding: 5px;
+    background-color: aliceblue;
+    text-align: left;
+    width: 100%;
+}
+.btn-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding: 15px;
+}
+.btn-menu {
+    display: grid;
+    background: linear-gradient(135deg, navy, blue, navy);
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 15px;
+    width: 100%;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    border: none;
+}
+
+.input-field { color: #000000; font-weight: 500; }
+.result-field { color: #2563eb; font-weight: 700; }
+
+.message {
+    color: red;
+    font-size: 0.75rem;
+    display: none;
+    text-align: center;
+    font-style: italic;
+}
+.selectpi {
+    font-size: 1.2rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border-radius: 5px;
+    border: 1px solid gray;
+    padding: 5px;
+    background-color: aliceblue;
+    text-align: left;
+    width: 100%;
+    color: rgb(64,64,64);
+}

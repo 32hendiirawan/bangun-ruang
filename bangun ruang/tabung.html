@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Tabung Pro</title>
+    <link rel="stylesheet" href="bangunruang.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Kalkulator Tabung</h2>
+            <p class="description">Masukkan nilai yang diketahui</p>
+            <img src="rumus/tabung.png" alt="Tabung" height="120px">
+        </div>
+
+        <div class="element">
+            <div>
+                <label>Pilihan Nilai Pi (π)</label>
+                <select id="pi-val" class="selectpi">
+                    <option value="3.141592653589793">Math.PI (Presisi Tinggi)</option>
+                    <option value="3.14">3.14 (Standar)</option>
+                    <option value="3.142857142857143">22/7 (Pecahan)</option>
+                </select>
+            </div>
+            <div>
+                <label>Jari-jari (r)</label>
+                <input type="number" id="r" class="input-field" placeholder="r">
+            </div>
+            <div>
+                <label>Diameter (d)</label>
+                <input type="number" id="d" class="input-field" placeholder="d">
+            </div>
+            <div>
+                <label>Tinggi (t)</label>
+                <input type="number" id="t" class="input-field" placeholder="t">
+            </div>
+            <div>
+                <label>Volume (V)</label>
+                <input type="number" id="v" class="input-field" placeholder="V">
+            </div>
+            <div>
+                <label>Luas Permukaan (L)</label>
+                <input type="number" id="l" class="input-field" placeholder="2πr(r+t)">
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button onclick="hitungTabung()" class="btn-menu">Hitung</button>
+            <button onclick="resetForm()" class="btn-menu">Reset</button>
+            <a href="../index.html" class="btn-menu">Home</a> 
+        </div>
+
+        <p id="error-msg" class="message"></p>
+    </div>
+
+    <script>
+        function hitungTabung() {
+            const pi = parseFloat(document.getElementById('pi-val').value);
+            const fields = ['r', 'd', 't', 'v', 'l'];
+            let vals = {};
+            let isManual = {};
+
+            fields.forEach(id => {
+                const el = document.getElementById(id);
+                const val = parseFloat(el.value);
+                vals[id] = val;
+                isManual[id] = !isNaN(val);
+                el.classList.remove('result-field');
+                el.classList.add('input-field');
+            });
+
+            // Hitung jumlah input (khusus r dan d dihitung sebagai satu kesatuan input dasar)
+            let inputCount = Object.values(isManual).filter(v => v).length;
+            if (inputCount < 2) { // Minimal 2 jika termasuk r/d, atau 3 jika r/d sudah diisi
+                document.getElementById('error-msg').innerText = "⚠️ Masukkan minimal 2 atau 3 nilai yang berbeda!";
+                document.getElementById('error-msg').classList.remove('hidden');
+                return;
+            }
+            document.getElementById('error-msg').classList.add('hidden');
+
+            let {r, d, t, v, l} = vals;
+
+            // Proses iteratif untuk menyelesaikan saling ketergantungan
+            for (let i = 0; i < 3; i++) {
+                // Relasi r dan d
+                if (isNaN(r) && !isNaN(d)) r = d / 2;
+                if (isNaN(d) && !isNaN(r)) d = r * 2;
+
+                // Mencari t (tinggi) dari Volume atau Luas
+                if (isNaN(t) && !isNaN(v) && !isNaN(r)) t = v / (pi * r * r);
+                if (isNaN(t) && !isNaN(l) && !isNaN(r)) t = (l / (2 * pi * r)) - r;
+
+                // Mencari r dari Volume dan t
+                if (isNaN(r) && !isNaN(v) && !isNaN(t)) r = Math.sqrt(v / (pi * t));
+
+                // Mencari Volume
+                if (isNaN(v) && !isNaN(r) && !isNaN(t)) v = pi * r * r * t;
+
+                // Mencari Luas Permukaan
+                if (isNaN(l) && !isNaN(r) && !isNaN(t)) l = 2 * pi * r * (r + t);
+            }
+
+            // Update UI
+            const finalVals = {r, d, t, v, l};
+            fields.forEach(id => {
+                const el = document.getElementById(id);
+                if (!isNaN(finalVals[id])) {
+                    el.value = parseFloat(finalVals[id].toFixed(4)); // Presisi lebih tinggi untuk tabung
+                    if (!isManual[id]) {
+                        el.classList.remove('input-field');
+                        el.classList.add('result-field');
+                    }
+                }
+            });
+        }
+
+        function resetForm() {
+            ['r', 'd', 't', 'v', 'l'].forEach(id => {
+                const el = document.getElementById(id);
+                el.value = '';
+                el.classList.remove('result-field');
+                el.classList.add('input-field');
+            });
+            document.getElementById('error-msg').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
